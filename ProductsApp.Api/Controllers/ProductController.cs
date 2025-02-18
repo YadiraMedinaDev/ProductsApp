@@ -24,4 +24,12 @@ public class ProductController : Controller
     [HttpPost]
     public async Task<ProductDto> Insert(InsertProductCommand command)
         => await _mediator.Send(command);
+
+    [HttpPut]
+    public async Task<ProductDto> Update(UpdateProductCommand command)
+        => await _mediator.Send(command);
+
+    [HttpDelete]
+    public async Task<bool> Delete(DeleteProductCommand command)
+        => await _mediator.Send(command);
 }
