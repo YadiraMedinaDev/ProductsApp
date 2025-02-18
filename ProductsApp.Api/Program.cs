@@ -1,6 +1,8 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using ProductsApp.Api.Filters;
+using ProductsApp.Application.Ports;
+using ProductsApp.Infrastructure.Adapters;
 using ProductsApp.Infrastructure.DataSource;
 using ProductsApp.Infrastructure.Extensions;
 
@@ -24,6 +26,8 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddAutoMapper(assemblyApplication);
 
 builder.Services.AddServices();
+
+builder.Services.AddTransient<IBlobStorageService, BlobStorageService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

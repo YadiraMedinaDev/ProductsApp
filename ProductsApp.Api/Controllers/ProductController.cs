@@ -22,7 +22,7 @@ public class ProductController : Controller
         => await _mediator.Send(new GetProductAllQuery());
 
     [HttpPost]
-    public async Task<ProductDto> Insert(InsertProductCommand command)
+    public async Task<ProductDto> Insert([FromForm] InsertProductCommand command)
         => await _mediator.Send(command);
 
     [HttpPut]

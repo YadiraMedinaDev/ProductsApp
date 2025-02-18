@@ -6,15 +6,17 @@ public class Product : DomainEntity
 {
     public string Name { get; set; } = default!;
 
-    public  string Description { get; set; } = default!;
+    public string Description { get; set; } = default!;
 
-    public  string Category { get; set; } = default!;
+    public string Category { get; set; } = default!;
 
-    public  string ImageUrl { get; set; } = default!;
+    public string ImageUrl { get; set; } = default!;
 
-    public Product() { }
+    public Product(string name, string description, string category, string imageUrl)
+        : this(default!, name, description, category, imageUrl)
+    {
+    }
 
-    //[JsonConstructor]
     public Product(Guid id, string name, string description, string category, string imageUrl)
     {
         if (string.IsNullOrWhiteSpace(name))
