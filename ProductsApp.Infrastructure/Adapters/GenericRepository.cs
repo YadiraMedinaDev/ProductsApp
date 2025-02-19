@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using ProductsApp.Domain.Common;
 using ProductsApp.Domain.Ports;
 using ProductsApp.Infrastructure.DataSource;
@@ -6,14 +7,14 @@ using ProductsApp.Infrastructure.DataSource;
 namespace ProductsApp.Infrastructure.Adapters;
 public class GenericRepository<T> : IRepository<T> where T : DomainEntity
 {
-    readonly DataContext Context;   
+    readonly DataContext _context;
     readonly DbSet<T> _dataset;
-    readonly char[] separator = [','];
+    readonly char[] _separator = [','];
 
     public GenericRepository(DataContext context)
     {
-        Context=context;
-        _dataset=Context.Set<T>();
+        _context = context;
+        _dataset = _context.Set<T>();
     }
 
     public async Task<T> GetOneAsync(Guid id, string? includeStringProperties = default)
@@ -22,7 +23,7 @@ public class GenericRepository<T> : IRepository<T> where T : DomainEntity
 
         if (!string.IsNullOrEmpty(includeStringProperties))
         {
-            foreach (var includeProperty in includeStringProperties.Split(separator, StringSplitOptions.RemoveEmptyEntries))
+            foreach (var includeProperty in includeStringProperties.Split(_separator, StringSplitOptions.RemoveEmptyEntries))
             {
                 query = query.Include(includeProperty);
             }
@@ -33,12 +34,12 @@ public class GenericRepository<T> : IRepository<T> where T : DomainEntity
 
     public async Task<IEnumerable<T>> GetManyAsync(string includeStringProperties = "", bool isTracking = false)
     {
-        IQueryable<T> query = Context.Set<T>();
+        IQueryable<T> query = _context.Set<T>();
 
         if (!string.IsNullOrEmpty(includeStringProperties))
         {
             foreach (var includeProperty in includeStringProperties.Split
-                (separator, StringSplitOptions.RemoveEmptyEntries))
+                (_separator, StringSplitOptions.RemoveEmptyEntries))
             {
                 query = query.Include(includeProperty);
             }
@@ -64,4 +65,35 @@ public class GenericRepository<T> : IRepository<T> where T : DomainEntity
         _ = entity ?? throw new ArgumentNullException(nameof(entity), "Entity can not be null");
         _dataset.Remove(entity);
     }
+
+    public async Task<IQueryable<T>> GetPaginationAsync(
+        Expression<Func<T, bool>>? filter = null,
+        Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+        string includeStringProperties = "",
+        bool isTracking = false)
+    {
+        IQueryable<T> query = _context.Set<T>();
+
+        if (filter != null)
+        {
+            query = query.Where(filter);
+        }
+
+        if (!string.IsNullOrEmpty(includeStringProperties))
+        {
+            foreach (var includeProperty in includeStringProperties
+                .Split(_separator, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+        }
+
+        if (orderBy != null)
+        {
+            return await Task.FromResult(orderBy(query));
+        }
+
+        return (!isTracking) ? await Task.FromResult(query.AsNoTracking()) : await Task.FromResult(query);
+    }
+    
 }

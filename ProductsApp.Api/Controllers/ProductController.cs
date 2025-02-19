@@ -18,8 +18,8 @@ public class ProductController : Controller
     }
 
     [HttpGet]
-    public async Task<IEnumerable<ProductDto>> GetallAsync()
-        => await _mediator.Send(new GetProductAllQuery());
+    public async Task<IEnumerable<ProductDto>> Get([FromQuery] GetProductPaginationQuery query)
+        => await _mediator.Send(query);
 
     [HttpPost]
     public async Task<ProductDto> Insert([FromForm] InsertProductCommand command)

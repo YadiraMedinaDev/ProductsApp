@@ -1,22 +1,24 @@
-﻿using ProductsApp.Domain.Common;
+﻿using System.Text.Json.Serialization;
+using ProductsApp.Domain.Common;
 using ProductsApp.Domain.Exceptions;
 
 namespace ProductsApp.Domain.Entities;
 public class Product : DomainEntity
 {
-    public string Name { get; set; } = default!;
+    public string Name { get; private set; } = default!;
 
-    public string Description { get; set; } = default!;
+    public string Description { get; private set; } = default!;
 
-    public string Category { get; set; } = default!;
+    public string Category { get; private set; } = default!;
 
-    public string ImageUrl { get; set; } = default!;
+    public string ImageUrl { get; private set; } = default!;
 
     public Product(string name, string description, string category, string imageUrl)
         : this(default!, name, description, category, imageUrl)
     {
     }
 
+    [JsonConstructor]
     public Product(Guid id, string name, string description, string category, string imageUrl)
     {
         if (string.IsNullOrWhiteSpace(name))
