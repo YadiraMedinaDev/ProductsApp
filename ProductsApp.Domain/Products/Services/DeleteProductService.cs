@@ -17,8 +17,8 @@ public class DeleteProductService
 
     public async Task<Product> DeleteAsync(Guid id)
     {
-        var product =await _productRepository.GetOneAsync(id);
-        if (product==null)
+        var product = await _productRepository.GetOneAsync(id);
+        if (product is null)
         {
             throw new NonExistentProductException($"The product {id} does not exist");
         }

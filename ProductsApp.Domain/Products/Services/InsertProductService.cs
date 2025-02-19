@@ -14,9 +14,8 @@ public class InsertProductService
         _productRepository = productRepository;
     }
 
-    public async Task<Product> AddAsync(Product insertProduct)
+    public async Task<Product> AddAsync(Product product)
     {
-        var product = new Product(Guid.Empty, insertProduct.Name, insertProduct.Description, insertProduct.Category, insertProduct.ImageUrl);
         await _productRepository.AddAsync(product);
         return product;
     }

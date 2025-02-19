@@ -17,7 +17,7 @@ public class UpdateProductService
     public async Task<Product> UpdateAsync(Product editProduct)
     {
         var product = await _productRepository.GetOneAsync(editProduct.Id);
-        if (product == null)
+        if (product is null)
         {
             throw new NonExistentProductException($"The product {editProduct.Id} does not exist");
         }
