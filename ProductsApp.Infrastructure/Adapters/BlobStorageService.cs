@@ -1,4 +1,5 @@
 ﻿using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Configuration;
 using ProductsApp.Application.Ports;
 
@@ -12,7 +13,7 @@ public class BlobStorageService : IBlobStorageService
         var connectionString = configuration["AzureBlobStorage:ConnectionString"];
         var containerName = configuration["AzureBlobStorage:ContainerName"];
         _containerClient = new BlobContainerClient(connectionString, containerName);
-        _containerClient.CreateIfNotExists();
+        _containerClient.CreateIfNotExists(PublicAccessType.Blob);
     }
 
     public async Task<string> UploadImageAsync(Stream imageStream, string fileName)
