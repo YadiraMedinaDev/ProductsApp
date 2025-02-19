@@ -1,6 +1,5 @@
 ﻿using ProductsApp.Domain.Common;
 using ProductsApp.Domain.Entities;
-using ProductsApp.Domain.Entities.Dto;
 using ProductsApp.Domain.Exceptions;
 using ProductsApp.Domain.Ports;
 
@@ -15,7 +14,7 @@ public class UpdateProductService
         _productRepository = productRepository;
     }
 
-    public async Task<Product> UpdateAsync(UpdateProductDto editProduct)
+    public async Task<Product> UpdateAsync(Product editProduct)
     {
         var product = await _productRepository.GetOneAsync(editProduct.Id);
         if (product == null)
@@ -23,7 +22,7 @@ public class UpdateProductService
             throw new NonExistentProductException($"The product {editProduct.Id} does not exist");
         }
 
-        product.Edit(editProduct.Name, editProduct.Description, editProduct.Category, editProduct.ImageUrl);
+        product.Edit(editProduct);
         _productRepository.UpdateAsync(product);
         return product;
     }

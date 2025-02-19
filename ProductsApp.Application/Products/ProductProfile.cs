@@ -10,7 +10,7 @@ public class ProductProfile:Profile
 {
     public ProductProfile()
     {
-        CreateMap<UpdateProductCommand, UpdateProductDto>();
+        CreateMap<UpdateProductCommand, Product>();
         CreateMap<InsertProductCommand, Product>();
         CreateMap<Product, ProductDto>();
         CreateMap<GetProductPaginationQuery, GetProductPaginationDto>();

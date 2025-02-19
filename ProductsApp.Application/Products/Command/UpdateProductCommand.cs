@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using ProductsApp.Application.Products.Command.Dto;
 
 namespace ProductsApp.Application.Products.Command;
@@ -7,5 +8,6 @@ public record UpdateProductCommand (
     string Name,
     string Description,
     string Category,
-    string ImageUrl): IRequest<ProductDto>;
+    IFormFile Image
+    ) : IRequest<ProductDto>;
 

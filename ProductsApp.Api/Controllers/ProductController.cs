@@ -26,7 +26,7 @@ public class ProductController : Controller
         => await _mediator.Send(command);
 
     [HttpPut]
-    public async Task<ProductDto> Update(UpdateProductCommand command)
+    public async Task<ProductDto> Update([FromForm] UpdateProductCommand command)
         => await _mediator.Send(command);
 
     [HttpDelete]
